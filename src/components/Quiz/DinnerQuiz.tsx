@@ -3,12 +3,30 @@
 import { useState } from "react";
 import type { Quiz } from "@/data/quizzes";
 
-export default function DinnerQuiz({ quiz: initialQuiz }: { quiz: Quiz }) {
-  const [quiz, setQuiz] = useState<Quiz>(initialQuiz);
+export default function DinnerQuiz({
+  allQuizzes,
+  initialIndex,
+}: {
+  allQuizzes: Quiz[];
+  initialIndex: number;
+}) {
+  const [quiz, setQuiz] = useState<Quiz>(allQuizzes[initialIndex]);
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [showResults, setShowResults] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [generateError, setGenerateError] = useState("");
+  const [isGenerated, setIsGenerated] = useState(false);
+
+  const switchQuiz = (id: string) => {
+    const found = allQuizzes.find((q) => q.id === id);
+    if (found) {
+      setQuiz(found);
+      setSelected(new Set());
+      setShowResults(false);
+      setGenerateError("");
+      setIsGenerated(false);
+    }
+  };
 
   const toggle = (id: number) => {
     setSelected((prev) => {
@@ -32,6 +50,7 @@ export default function DinnerQuiz({ quiz: initialQuiz }: { quiz: Quiz }) {
       setQuiz(newQuiz);
       setSelected(new Set());
       setShowResults(false);
+      setIsGenerated(true);
     } catch (err) {
       setGenerateError(
         err instanceof Error ? err.message : "Something went wrong",
@@ -82,6 +101,33 @@ export default function DinnerQuiz({ quiz: initialQuiz }: { quiz: Quiz }) {
       )
       .slice(0, 3);
   };
+
+  const quizPicker = (
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <select
+        value={isGenerated ? "" : quiz.id}
+        onChange={(e) => switchQuiz(e.target.value)}
+        className="rounded-card border border-gray-200 bg-white px-3 py-2 text-sm text-body-color shadow-subtle hover:border-primary/40 focus:border-primary focus:outline-none"
+      >
+        {isGenerated && (
+          <option value="" disabled>
+            {quiz.title}
+          </option>
+        )}
+        {allQuizzes.map((q) => (
+          <option key={q.id} value={q.id}>
+            {q.title}
+          </option>
+        ))}
+      </select>
+      <button
+        onClick={generateNewQuiz}
+        className="text-sm text-body-color underline hover:text-primary"
+      >
+        Generate New Quiz
+      </button>
+    </div>
+  );
 
   const profileKey = showResults ? calculateProfile() : null;
   const profile = profileKey ? quiz.profiles[profileKey] : null;
@@ -252,7 +298,7 @@ export default function DinnerQuiz({ quiz: initialQuiz }: { quiz: Quiz }) {
               )}
 
               {/* Actions */}
-              <div className="flex flex-col items-center gap-3 text-center">
+              <div className="flex flex-col items-center gap-4 text-center">
                 <button
                   onClick={() => {
                     setShowResults(false);
@@ -262,21 +308,7 @@ export default function DinnerQuiz({ quiz: initialQuiz }: { quiz: Quiz }) {
                 >
                   Try Again
                 </button>
-                <div className="flex gap-3">
-                  <a
-                    href="/quiz"
-                    className="text-sm text-body-color underline hover:text-primary"
-                  >
-                    Try a Different Quiz
-                  </a>
-                  <span className="text-sm text-gray-300">|</span>
-                  <button
-                    onClick={generateNewQuiz}
-                    className="text-sm text-body-color underline hover:text-primary"
-                  >
-                    Generate New Quiz
-                  </button>
-                </div>
+                {quizPicker}
               </div>
             </div>
           </div>
@@ -380,7 +412,7 @@ export default function DinnerQuiz({ quiz: initialQuiz }: { quiz: Quiz }) {
               })}
             </div>
 
-            {/* Submit + Generate */}
+            {/* Submit + Switch */}
             <div className="flex flex-col items-center gap-4 text-center">
               <button
                 onClick={() => setShowResults(true)}
@@ -395,12 +427,7 @@ export default function DinnerQuiz({ quiz: initialQuiz }: { quiz: Quiz }) {
                   ? "Select at least one item to continue"
                   : "Reveal My Result"}
               </button>
-              <button
-                onClick={generateNewQuiz}
-                className="text-sm text-body-color underline hover:text-primary"
-              >
-                Generate New Quiz
-              </button>
+              {quizPicker}
             </div>
           </div>
         </div>

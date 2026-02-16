@@ -9,7 +9,7 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 export default function QuizPage() {
-  const quiz = quizzes[Math.floor(Math.random() * quizzes.length)];
+  const initialIndex = Math.floor(Math.random() * quizzes.length);
 
   return (
     <>
@@ -17,7 +17,7 @@ export default function QuizPage() {
         pageName="Dinner Quiz"
         description="Discover your food personality with The Disagreeables."
       />
-      <DinnerQuiz quiz={quiz} />
+      <DinnerQuiz allQuizzes={quizzes} initialIndex={initialIndex} />
     </>
   );
 }
