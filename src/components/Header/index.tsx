@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -42,70 +43,14 @@ const Header = () => {
                 sticky ? "py-5 lg:py-2" : "py-8"
               }`}
             >
-              <span className="flex items-center gap-2 font-serif text-xl font-bold text-primary">
-                <svg
-                  className="h-7 w-7"
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Knife */}
-                  <path
-                    d="M9 4c0 0 .5 1.5.5 4.5S8 14 8 14l6 14"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <line
-                    x1="7.5"
-                    y1="14"
-                    x2="10"
-                    y2="14"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                  {/* Fork */}
-                  <path
-                    d="M23 4v6c0 2-1 3.5-2.5 4l2.5 14"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <line
-                    x1="21"
-                    y1="4"
-                    x2="21"
-                    y2="10"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                  <line
-                    x1="25"
-                    y1="4"
-                    x2="25"
-                    y2="10"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                  {/* Cross */}
-                  <line
-                    x1="6"
-                    y1="26"
-                    x2="26"
-                    y2="6"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                    strokeLinecap="round"
-                    opacity="0.3"
-                  />
-                </svg>
-                Gourmet Disagreeables
-              </span>
+              <Image
+                src="/images/logo.png"
+                alt="Disagreeables"
+                width={180}
+                height={90}
+                className="h-10 w-auto"
+                priority
+              />
             </Link>
           </div>
           <div className="flex w-full items-center justify-between px-4">
