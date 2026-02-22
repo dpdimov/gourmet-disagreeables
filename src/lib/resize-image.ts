@@ -1,5 +1,7 @@
 const MAX_WIDTH = 1200;
+const MAX_HEIGHT = 1200;
 const QUALITY = 0.8;
+const SIZE_THRESHOLD = 500 * 1024; // 500KB
 
 export function resizeImage(file: File): Promise<File> {
   return new Promise((resolve, reject) => {
@@ -13,16 +15,27 @@ export function resizeImage(file: File): Promise<File> {
     img.onload = () => {
       URL.revokeObjectURL(img.src);
 
-      // No resize needed if already small enough
-      if (img.width <= MAX_WIDTH) {
+      const needsResize = img.width > MAX_WIDTH || img.height > MAX_HEIGHT;
+      const needsCompress = file.size > SIZE_THRESHOLD;
+
+      // Skip if already small in both dimensions and file size
+      if (!needsResize && !needsCompress) {
         resolve(file);
         return;
       }
 
-      const scale = MAX_WIDTH / img.width;
+      let width = img.width;
+      let height = img.height;
+
+      if (needsResize) {
+        const scale = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+
       const canvas = document.createElement("canvas");
-      canvas.width = MAX_WIDTH;
-      canvas.height = Math.round(img.height * scale);
+      canvas.width = width;
+      canvas.height = height;
 
       const ctx = canvas.getContext("2d");
       if (!ctx) {
