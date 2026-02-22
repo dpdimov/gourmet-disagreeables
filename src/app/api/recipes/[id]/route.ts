@@ -15,7 +15,10 @@ export async function GET(
 
   const recipe = await prisma.recipe.findUnique({
     where: { id },
-    include: { createdBy: { select: { name: true } } },
+    include: {
+      createdBy: { select: { name: true } },
+      riffedFrom: { select: { id: true, title: true } },
+    },
   });
 
   if (!recipe) {

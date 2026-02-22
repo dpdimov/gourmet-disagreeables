@@ -25,6 +25,12 @@ const menuData: Menu[] = [
     path: "/quiz",
     newTab: false,
   },
+  {
+    id: 5,
+    title: "Recipe Riff",
+    path: "/riff",
+    newTab: false,
+  },
 ];
 
 export default menuData;

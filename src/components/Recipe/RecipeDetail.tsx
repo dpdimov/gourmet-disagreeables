@@ -92,6 +92,17 @@ const RecipeDetailPage = ({ recipe_id }: { recipe_id: string }) => {
                       </span>
                     )}
                     <span>{formatDate(recipe.createdAt)}</span>
+                    {recipe.riffedFrom && (
+                      <span>
+                        Riffed from{" "}
+                        <a
+                          href={`/recipes/${recipe.riffedFrom.id}`}
+                          className="font-medium text-primary hover:underline"
+                        >
+                          {recipe.riffedFrom.title}
+                        </a>
+                      </span>
+                    )}
                   </div>
 
                   {/* Image */}
@@ -185,6 +196,16 @@ const RecipeDetailPage = ({ recipe_id }: { recipe_id: string }) => {
                       </p>
                     </div>
                   )}
+
+                  {/* Riff this recipe */}
+                  <div className={`${recipe.sourceUrl ? "mt-4" : "border-t border-gray-200 pt-4"}`}>
+                    <a
+                      href={`/riff?recipe=${recipe.id}`}
+                      className="inline-flex items-center gap-2 rounded-lg border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary transition hover:bg-primary/5"
+                    >
+                      Riff this Recipe
+                    </a>
+                  </div>
                 </div>
               </div>
             )

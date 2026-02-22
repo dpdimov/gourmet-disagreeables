@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       comments: body.comments || null,
       image: body.image || null,
       sourceUrl: body.sourceUrl || null,
+      riffedFromId: body.riffedFromId ? parseInt(body.riffedFromId) : null,
       isVisible: true,
     },
   });

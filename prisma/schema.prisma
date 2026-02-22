@@ -33,4 +33,7 @@ model Recipe {
   createdAt        DateTime @default(now())
   createdBy        User?    @relation(fields: [createdById], references: [id])
   createdById      String?
+  riffedFromId     Int?
+  riffedFrom       Recipe?  @relation("Riffs", fields: [riffedFromId], references: [id])
+  riffs            Recipe[] @relation("Riffs")
 }

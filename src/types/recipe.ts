@@ -15,4 +15,9 @@ export type Recipe = {
   createdBy: {
     name: string;
   } | null;
+  riffedFromId?: number | null;
+  riffedFrom?: {
+    id: number;
+    title: string;
+  } | null;
 };
