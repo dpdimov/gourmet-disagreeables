@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { resizeImage } from "@/lib/resize-image";
 
 type RecipeData = {
   id?: number;
@@ -51,8 +52,9 @@ export default function RecipeForm({
     if (!file) return;
 
     setUploading(true);
+    const resized = await resizeImage(file);
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", resized);
 
     try {
       const res = await fetch("/api/upload", {

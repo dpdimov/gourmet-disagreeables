@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { resizeImage } from "@/lib/resize-image";
 
 const categories = ["starter", "side", "main", "dessert"];
 
@@ -42,8 +43,9 @@ export default function SubmitForm() {
     if (!file) return;
     setUploading(true);
     try {
+      const resized = await resizeImage(file);
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", resized);
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
